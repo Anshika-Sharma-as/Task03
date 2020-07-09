@@ -16,22 +16,25 @@ cp * /root/Task03/codes
 
 for job 2
 
-execute shell :
+chroot /host /bin/bash <<"EOT"
+cd /Task03
+export len=$(ls /Task03 | grep index | grep html | wc -l)
 
-for file in *;
-do 
-if [ ${file##*.} == "html" ]
+
+if [ $len -gt 0 ]
 then 
-if sudo kubectl get pod | grep mywebpod
+if sudo kubectl get deployment | grep mywebpod
 then
-echo "Pod is already running"
+sudo kubectl apply -f pod.yml
+kubectl cp index.html default/mywebpod-56659c9994-s2dbn:/usr/local/apache2/htdocs/index.html
 else 
-sudo kubectl create -f /codes/pod.yml
-sudo kubectl expose pod/mywebpod --port=80 --type==NodePort
-
+sudo kubectl create -f pod.yml
+kubectl cp index.html default/mywebpod-56659c9994-s2dbn:/usr/local/apache2/htdocs/index.html
+sudo kubectl expose deployment/mywebpod --port=80 --type=NodePort
+fi
 fi
 
-done
+EOT
 
 *********************************************************
 
