@@ -1,38 +1,21 @@
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: mypvc1
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
----
 
 apiVersion: v1
 kind: Pod
 metadata:
-  name: mypod1
-  labels:
-    env: prod
-    dc: US
-
+  name: mywebpod
 spec:
-  containers:
-  - name: "mycon1"
-    image: "vimal13/apache-webserver-php"
-  ports:
-     - containerPort: 80
-       targetPort: 8085
-       name: mypod1
-    volumeMounts:
-     - name: web-vol1
-       mountPath:  /var/www/html
   volumes:
-  - name: web-vol1 
-    persistentVolumeClaim: 
-      claimName: mypvc1
-
+    - name: pv-storage
+      persistentVolumeClaim:
+        claimName: mypvc1
+  containers:
+    - name: mywebpod
+      image: httpd
+      ports:
+        - containerPort: 80
+          name: "http-server"
+      volumeMounts:
+        - mountPath: "/var/www/html"
+          name: pv-storage
 
 

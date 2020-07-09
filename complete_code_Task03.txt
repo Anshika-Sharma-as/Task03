@@ -1,0 +1,64 @@
+for job 1
+
+
+github repo : https://github.com/Anshika-Sharma-as/Task03.git
+
+
+execute shell : 
+
+
+mkdir /root/Task03/codes
+rm -rf /root/Task03/codes/
+cp * /root/Task03/codes
+
+
+**************************************************
+
+for job 2
+
+execute shell :
+
+for file in *;
+do 
+if [ ${file##*.} == "html" ]
+then 
+if sudo kubectl get pod | grep mywebpod
+then
+echo "Pod is already running"
+else 
+sudo kubectl create -f /codes/pod.yml
+sudo kubectl expose pod/mywebpod --port=80 --type==NodePort
+
+fi
+
+done
+
+*********************************************************
+
+for job3 
+
+status=$( curl -o /dev/null -s -w "%{http_code}" http://192.169.99.103:8085 )
+if [[ $status == 200 ]] 
+then 
+exit 0
+else 
+exit 1
+fi
+
+email sending 
+
+**********************************************
+
+for job 4 
+
+if sudo kubectl get pod | grep mywebpod
+then 
+exit 0
+else 
+sudo kubectl create -f /codes/pod.yml
+
+fi 
+
+
+**************************************
+
