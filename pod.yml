@@ -10,24 +10,37 @@ spec:
       storage: 10Gi
 
 ---
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: mywebpod
+  labels:
+     app: web-app
 spec:
-  volumes:
-    - name: pv-storage
-      persistentVolumeClaim:
-        claimName: mypvc1
-  containers:
-    - name: mywebpod
-      image: httpd
-      ports:
-        - containerPort: 80
-          targetPort: 8085
-          name: "http-server"
-      volumeMounts:
-        - mountPath: "/var/www/html"
-          name: pv-storage
+  selector:
+     matchLabels:
+       app: web-app
+  strategy:
+     type: RollingUpdate
+  template:
+     metadata:
+        labels:
+          app: web-app
+     spec:
+        containers:
+        - name: mywebpod
+          image: httpd
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: "/var/www/html"
+              name: pv-storage
+        volumes:
+           - name: pv-storage
+             persistentVolumeClaim:
+                claimName: mypvc1
+  
+     
+  
 
 
