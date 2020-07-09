@@ -24,6 +24,7 @@ spec:
       image: httpd
       ports:
         - containerPort: 80
+          targetPort: 8085
           name: "http-server"
       volumeMounts:
         - mountPath: "/var/www/html"
